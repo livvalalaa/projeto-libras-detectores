@@ -1,2 +1,2 @@
-# projeto-libras-detectores
+# projeto-libras-sistemas
 Detector de Libras
