@@ -1,53 +1,105 @@
 # projeto-libras-sistemas
+
 Detector de Libras
 
-### README.md — como rodar (do jeito mais fácil)
+---
 
-1. Abra o terminal e fique na **pasta do projeto** onde estão os arquivos do projeto (especialmente o `requirements.txt`).
-2. Instale tudo o que o projeto precisa:
+## Como rodar 
+
+1. Abra o terminal e fique na **pasta do projeto** onde está o `requirements.txt`.
+2. Instale as dependências:
 ```bash
 pip install -r requirements.txt
 ```
-3. Agora é só rodar:
+3. Rode o sistema:
 ```bash
 python main.py
 ```
 
-> Se der algum erro dizendo que não existe `main.py`, não se assuste: neste repositório ele pode estar dentro de outra pasta. Nesse caso, rode o `main.py` com o caminho completo (ex.: `python projeto-libras-sistemas/scripts/main.py`).
+> Se o seu `main.py` estiver dentro de outra pasta, use o caminho completo (ex.: `python projeto-libras-sistemas/scripts/main.py`).
+
+---
+
+## Relatório
+
+### Introdução (por que Libras?)
+Libras (Língua Brasileira de Sinais) é a forma natural de comunicação da comunidade surda no Brasil. Ainda assim, no dia a dia, é comum encontrar barreiras — na escola, no atendimento e na convivência social — que dificultam a comunicação.
+
+Por isso, criar um sistema que **reconheça sinais de Libras** ajuda a aproximar pessoas surdas e ouvintes, deixando a comunicação mais acessível e inclusiva.
+
+### Metodologia (IA com MediaPipe)
+O projeto funciona como um **pipeline** (um processo em etapas). A ideia é que uma fase produza informação útil para a próxima:
+
+1. **Coleta e organização dos dados**
+   - Os exemplos de sinais geraram um dataset (`dataset.csv`).
+   - Nele:
+     - **X (entradas):** dados numéricos extraídos dos sinais (representação das mãos/corpo)
+     - **y (saída):** a letra/classe correspondente ao sinal
+
+2. **Extração de características com MediaPipe**
+   - O MediaPipe detecta pontos do corpo (principalmente mãos).
+   - Em vez de a IA “ler” a imagem inteira, ela aprende com **coordenadas**, que descrevem o movimento de forma mais consistente.
+
+3. **Treinamento do modelo de classificação**
+   - Com o dataset pronto, o modelo aprende a relação **X → y**.
+   - Depois do treino, o modelo é salvo para ser usado no reconhecimento.
+
+### Resultados
+O resultado do projeto é visto de forma prática porque o pipeline só avança quando cada etapa cumpre seu papel:
+
+- **Dados consistentes:** o sistema verifica se o `dataset.csv` existe e não está vazio.
+- **Treinamento concluído:** a etapa de treino só termina quando o modelo é gerado com sucesso.
+- **Modelo disponível:** o modelo fica salvo e pronto para reconhecimento.
+
+No fim, a combinação de **MediaPipe (extração dos pontos)** com **aprendizado de máquina (classificação)** cria um processo organizado, verificável e que permite evoluir com segurança.
 
 
 ---
 
-### Relatório
+## Como rodar (bem simples)
 
-#### Introdução (por que Libras?)
-Libras (Língua Brasileira de Sinais) é a forma natural de comunicação da comunidade surda no Brasil. E, na rotina, ainda tem muita barreira no meio do caminho: em situações simples, como educação, atendimento e convivência social, nem sempre é fácil se fazer entender.
+1. Abra o terminal e fique na pasta do projeto onde está o `requirements.txt`.
+2. Instale as dependências:
+```bash
+pip install -r requirements.txt
+si3. Rode o projeto:
+```bash
+s```
 
-Por isso, criar um sistema que **reconhece sinais de Libras** faz diferença de verdade: ajuda a aproximar pessoas surdas e ouvintes e deixa a comunicação mais acessível.
+> Se o seu `main.py` estiver dentro de outra pasta, rode com o caminho completo (ex.: `python projeto-libras-sistemas/scripts/main.py`).
 
+---
 
-#### Metodologia (IA com MediaPipe)
-O projeto foi pensado como um fluxo em etapas (pipeline). Cada parte faz seu papel e entrega a informação pronta para a próxima etapa.
+## Relatório — Membro 4 (Estratégista)
 
-1. **Coleta e preparação dos dados**
-   - Os exemplos de sinais foram organizados em um dataset (`dataset.csv`).
-   - No dataset, temos:
-     - **entradas (X):** dados numéricos extraídos do sinal (representação das mãos/corpo)
-     - **saída (y):** a letra/classe que o sistema deve identificar
+### Introdução (por que Libras?)
+Libras é a língua natural da comunidade surda no Brasil. E, na vida real, ainda existem muitos momentos em que a comunicação não acontece do jeito que deveria — seja na escola, em atendimentos, ou no dia a dia.
+
+Por isso, desenvolver um sistema que **reconhece sinais de Libras** é mais do que um projeto técnico: é uma forma de apoiar a inclusão e tornar a comunicação mais acessível.
+
+### Metodologia (IA com MediaPipe)
+O projeto foi construído em um fluxo de etapas (pipeline). A lógica é simples: cada etapa prepara o que a próxima precisa.
+
+1. **Coleta e organização dos dados**
+   - Os exemplos de sinais viram um dataset (`dataset.csv`).
+   - No dataset:
+     - **X (entradas):** dados numéricos extraídos do sinal (a representação do que o usuário fez)
+     - **y (saída):** a letra/classe que o sistema deve identificar
 
 2. **Extração de características com MediaPipe**
-   - O MediaPipe detecta pontos do corpo (principalmente das mãos) e traduz isso para números.
-   - Em vez de a IA tentar “entender” a imagem inteira, ela trabalha com **coordenadas**, o que deixa os padrões do movimento mais fáceis de aprender.
+   - O MediaPipe detecta pontos do corpo (principalmente mãos).
+   - Em vez de “olhar” a imagem inteira, ele transforma o movimento em **coordenadas**, que são mais fáceis da IA aprender.
 
 3. **Treinamento do modelo de classificação**
-   - Com os dados prontos, o modelo aprende a relacionar os padrões numéricos (X) com a classe correta (y).
-   - Depois do treino, o modelo é salvo para ser usado futuramente no reconhecimento.
+   - Com o dataset pronto, o modelo aprende o padrão que liga **X → y**.
+   - Depois do treino, o modelo é salvo para ser usado no reconhecimento.
 
-#### Resultados
-Os resultados do projeto foram acompanhados de forma prática, porque o pipeline só avança quando cada etapa cumpre o seu objetivo:
+### Resultados
+Os resultados aparecem de forma bem concreta porque o pipeline tem validações em cada etapa:
 
-- **Consistência dos dados:** o dataset precisa existir e ter conteúdo (senão o treino não faz sentido).
-- **Treinamento concluído:** a etapa de treino só termina quando o modelo foi gerado sem erros.
-- **Modelo salvo:** o sistema passa a ter um “cérebro” (o arquivo do modelo), pronto para ser usado em reconhecimento.
+- **Dados consistentes:** o sistema verifica se o `dataset.csv` existe e não está vazio antes de treinar.
+- **Treino concluído:** o fluxo só segue se o treinamento termina com sucesso.
+- **Modelo disponível:** ao final, o modelo fica salvo para o reconhecimento funcionar depois.
 
-Em resumo: essa estratégia junta visão computacional (MediaPipe) com aprendizado de máquina, criando um processo que dá pra acompanhar, testar e melhorar com segurança.
+No fim, a combinação de **MediaPipe (visão/extração de pontos)** com **aprendizado de máquina (classificação)** deixa o processo organizado, testável e pronto para evoluir.
+
