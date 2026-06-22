@@ -4,7 +4,7 @@ import sys
 
 # CONFIGURAÇÃO DE CAMINHOS
 # Descobre as pastas do projeto de forma automática
-RAIZ_PROJETO = os.path.dirname(os.path.abspath(__file__))
+RAIZ_PROJETO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PASTA_SCRIPTS = os.path.join(RAIZ_PROJETO, "scripts")
 PASTA_DADOS = os.path.join(RAIZ_PROJETO, "dados")
 
