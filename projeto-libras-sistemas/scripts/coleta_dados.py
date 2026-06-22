@@ -8,8 +8,7 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
 mp_draw = mp.solutions.drawing_utils
 
-if not os.path.exists("dados"):
-    os.makedirs("dados")
+os.makedirs("dados", exist_ok=True)
 
 caminho_csv = "dados/dataset.csv"
 
@@ -28,6 +27,8 @@ print("2. Faça o sinal da vogal (A, E, I, O, ou U).")
 print("3. Pressione a recla correspondente no teclado para salvar.")
 print("4. Pressione 'q' para sair.")
 
+contador = 0
+
 while True:
     sucesso, img = cap.read()
     if not sucesso:
@@ -39,17 +40,21 @@ while True:
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     resultado = hands.process(img_rgb)
 
+    tecla = cv2.waitKey(1) & 0xFF
+    letra = None
+
+    if tecla in [ord("a"), ord("e"), ord ("i"), ord("o"), ord("u")]:
+        letra = chr(tecla).upper()
+
     if resultado.multi_hand_landmarks:
         for hand_landmarks in resultado.multi_hand_landmarks:
             mp_draw.draw_landmarks(img, hand_landmarks, mp_hands.HAND_CONNECTIONS)
-
+            
             # Capturação da tecla
-            tecla = cv2.waitKey(1) & 0xFF
-            if tecla in [ord("a"), ord("e"), ord("i"), ord("o"), ord("u")]:
-                letra = chr(tecla).upper()
-
-                # Extração dos pontos (21 x e 21 y)
+            if len(resultado.multi_hand_landmarks) == 1:
                 dados = []
+                
+                # Extração dos pontos (21 x e 21 y)
                 for lm in hand_landmarks.landmark:
                     dados.append(lm.x)
                 for lm in hand_landmarks.landmark:
@@ -60,10 +65,12 @@ while True:
                 with open(caminho_csv, "a", newline="") as f:
                     writer = csv.writer(f)
                     writer.writerow(dados)
-                print(f"Salvo: {letra}")
+
+                contador += 1
+                print(f"Salvo: {letra} ({contador})")
 
     cv2.imshow("Coleta de Dados - Vogais", img)
-    if cv2.waitKey(1) == ord("q"):
+    if tecla == ord("q"):
         break
 
 cap.release()
