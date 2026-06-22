@@ -1,7 +1,7 @@
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split 
-from sklearn.ensembl import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 # Carrega os dados (como abrir uma planilha
 df = pd.read_csv('dados/dataset.csv')
