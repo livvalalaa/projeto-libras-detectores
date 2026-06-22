@@ -20,11 +20,13 @@ if not os.path.exists(caminho_csv):
         writer.writerow(header)
 
 cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    raise RuntimeError("Não foi possível abrir a câmera. Verifique se ela está conectada e disponível.")
 
 print("INSTRUÇÕES:")
 print("1. Posicione a mão na câmera.")
 print("2. Faça o sinal da vogal (A, E, I, O, ou U).")
-print("3. Pressione a recla correspondente no teclado para salvar.")
+print("3. Pressione a tecla correspondente no teclado para salvar.")
 print("4. Pressione 'q' para sair.")
 
 contador = 0
@@ -42,16 +44,16 @@ while True:
 
     tecla = cv2.waitKey(1) & 0xFF
     letra = None
-
     if tecla in [ord("a"), ord("e"), ord ("i"), ord("o"), ord("u")]:
         letra = chr(tecla).upper()
 
     if resultado.multi_hand_landmarks:
-        for hand_landmarks in resultado.multi_hand_landmarks:
+        if len(resultado.multi_hand_landmarks) == 1:
+            hand_landmarks = resultado.multi_hand_landmarks[0]
             mp_draw.draw_landmarks(img, hand_landmarks, mp_hands.HAND_CONNECTIONS)
             
             # Capturação da tecla
-            if len(resultado.multi_hand_landmarks) == 1:
+            if letra is not None:
                 dados = []
                 
                 # Extração dos pontos (21 x e 21 y)
@@ -68,6 +70,9 @@ while True:
 
                 contador += 1
                 print(f"Salvo: {letra} ({contador})")
+        else:
+            for hand_landmarks in resultado.multi_hand_landmarks:
+                mp_draw.draw_landmarks(img, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
     cv2.imshow("Coleta de Dados - Vogais", img)
     if tecla == ord("q"):
