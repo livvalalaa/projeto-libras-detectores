@@ -1,4 +1,5 @@
 import os
+import csv
 import subprocess
 import sys
 
@@ -13,6 +14,7 @@ PASTA_DADOS = os.path.join(RAIZ_PROJETO, "dados")
 SCRIPT_COLETA = os.path.join(PASTA_SCRIPTS, "coleta_dados.py")  
 SCRIPT_TREINAMENTO = os.path.join(PASTA_SCRIPTS, "treinar_modelo.py")  
 ARQUIVO_DATASET = os.path.join(PASTA_DADOS, "dataset.csv")
+LETRAS_ESPERADAS = {"A", "E", "I", "O", "U"}
 
 
 # VERIFICAÇÃO DE AMBIENTE
@@ -63,8 +65,17 @@ def validar_dados():
     if os.path.getsize(ARQUIVO_DATASET) == 0:
         print(f"Erro: O arquivo '{ARQUIVO_DATASET}' esta vazio.")
         return False
+
+    with open(ARQUIVO_DATASET, newline="") as f:
+        reader = csv.DictReader(f)
+        labels_presentes = {row["label"] for row in reader if row.get("label")}
+ 
+    faltando = LETRAS_ESPERADAS - labels_presentes
+    if faltando:
+        print(f"Erro: faltam exemplos das letras: {sorted(faltando)}")
+        return False
         
-    print(f"Arquivo '{os.path.basename(ARQUIVO_DATASET)}' validado.\n")
+    print(f"Arquivo '{os.path.basename(ARQUIVO_DATASET)}' validado com letras: {sorted(labels_presentes)}\n")
     return True
 
 
