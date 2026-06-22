@@ -1,10 +1,18 @@
+import os
 import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split 
 from sklearn.ensemble import RandomForestClassifier
 
-# Carrega os dados (como abrir uma planilha
+# Criar a pasta
+os.makedirs('modelos', exist_ok=True)
+
+# Carrega os dados (como abrir uma planilha)
 df = pd.read_csv('dados/dataset.csv')
+
+# Garantir a segurança
+if 'label' not in df.columns:
+  raise ValueError("Coluna 'label' não encontrada no dataset!")
 
 # Separar: X são as coordenadas (o que a IA vê), y é a letra (o que ela deve adivinhar)
 X = df.drop('label', axis=1) 
